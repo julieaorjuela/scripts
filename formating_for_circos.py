@@ -32,6 +32,8 @@
         - \-s <filename>, --sdpop <filename>   sdpop version 3 output 
         - \-b1 <filename>, --bam1 <filename>  bam file 1
         - \-b2 <filename>, --bam2 <filename>  bam file 2
+        - \-v1 <filename>, --vcf1 <filename>  vcf file 1
+        - \-v2 <filename>, --vcf2 <filename>  vcf file 2
 """
 
 ##################################################
