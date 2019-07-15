@@ -21,7 +21,7 @@
     This script create input 'link.txt' and 'kariotype.txt' to circos.
     
     -------
-    >>> formating_for_circos.py -d DE.csv -g GFF.gff -o OUT.bed
+    >>> formating_for_circos.py -s SDpop -b1 ref1.bam -b2 ref2.bam -v1 vcf1.vcf -v2 vcf2.vcf
     
     Help Programm
     -------------
