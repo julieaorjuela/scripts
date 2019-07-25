@@ -148,6 +148,9 @@ if [ $fastq != "" ] ; then
 			echo "module load bioinfo/express/1.5.1" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
 			echo "module load bioinfo/kallisto/0.43.1" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
 			echo "module load bioinfo/RSEM/1.0" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
+			echo "module load bioinfo/salmon/0.10.2" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
+			echo "module load bioinfo/samtools/1.7" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
+
 			
 			#defining scratch and destination			
 			echo " " >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
@@ -170,14 +173,15 @@ if [ $fastq != "" ] ; then
 			echo "cd \$pathToScratch/results_$shortName/" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
 			echo "# Running tool"  >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
 				
-			echo ""perl /usr/local/trinityrnaseq-2.5.1/util/align_and_estimate_abundance.pl --transcripts "$fasta" --seqType fq --left $R1 --right $R2 --est_method RSEM --aln_method bowtie2 --trinity_mode --prep_reference --output_dir "$shortName"_bowtie_outdir"" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
+			echo ""perl /usr/local/trinityrnaseq-2.5.1/util/align_and_estimate_abundance.pl --transcripts "$fasta" --seqType fq --left $R1 --right $R2 --est_method salmon --trinity_mode --prep_reference --output_dir "$shortName"_salmon_outdir"" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
 			       
 			#Printing command executed
-			echo "cmd=\" perl /usr/local/trinityrnaseq-2.5.1/util/align_and_estimate_abundance.pl --transcripts "$fasta" --seqType fq --left $R1 --right $R2 --est_method RSEM --aln_method bowtie2 --trinity_mode --prep_reference --output_dir "$shortName"_bowtie_outdir  \"" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
+			echo "cmd=\" perl /usr/local/trinityrnaseq-2.5.1/util/align_and_estimate_abundance.pl --transcripts "$fasta" --seqType fq --left $R1 --right $R2 --est_method salmon --trinity_mode --prep_reference --output_dir "$shortName"_salmon_outdir  \"" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
 			
 			echo "echo \"commande executee: \$cmd\"" >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
 			
-			
+			 #'--coordsort_bam si bowtie  ou bowtie2 Rsem
+			 
 			# Transfert des données du noeud vers master
 			echo " " >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"
 			echo "# Transfert des données du noeud vers master"  >> $SHPath"/"$count"_trinity-align-and-estimate-abundance-par-sample.sh"

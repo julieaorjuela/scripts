@@ -188,14 +188,15 @@ if [ $fastq != "" ] ; then
 	# Transfert des données du noeud vers master
 	echo " " >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
 	echo "# Transfert des données du noeud vers master"  >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
-	echo "scp -rp \$pathToScratch/results_"$shortName" \$pathToDest/"  >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
+	echo "rm \$pathToScratch/*.fastq.gz \$pathToScratch/*.fasta"  >> $SHPath
+	echo "scp -rp \$pathToScratch/ \$pathToDest/"  >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
 	echo "echo \"Transfert des donnees node -> master\"" >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
 	
 	# Suppression du repertoire tmp noeud
 	echo " " >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"	
-	#echo "# Suppression du repertoire tmp noeud"  >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
-	#echo "rm -rf \$pathToScratch" >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
-	#echo "echo \"Suppression des donnees sur le noeud\"" >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
+	echo "# Suppression du repertoire tmp noeud"  >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
+	echo "rm -rf \$pathToScratch" >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
+	echo "echo \"Suppression des donnees sur le noeud\"" >> $SHPath"/trinity-align-and-estimate-abundance-global.sh"
 	
 #((count = count - 1))
 

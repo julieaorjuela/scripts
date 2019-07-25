@@ -1,8 +1,7 @@
 #!/bin/bash -a
 # -*- coding: utf-8 -*-
 ## @package ./BUSCO-par-sample-JAv1.0.sh
-# @author Sebastien Ravel. Adapted to trinity by Julie Orjuela
-# TODO: accepte fastq.gz seulement avec nom de fichier sample_R1.fastq.gz et sample_R2.fastq.gz, et en mode PE.
+# @author Sebastien Ravel. Adapted to BUSCO by Julie Orjuela, modified by Valentin Klein.
 
 
 version=1.0
@@ -25,7 +24,7 @@ function help
  Exemple Usage: ./BUSCO-par-sample-JAv1.0.sh -f ./fastq -m julie.orjuela@ird.fr
  Usage: ./BUSCO-par-sample-JAv1.0.sh -f {path/to/fasta} -m obiwankenobi@jedi.force
 	options:
-		-f {path/to/fastq/and/fasta} = path to fastq and Trinity.fasta transcrits
+		-f {path/to/fastq/and/fasta} = path to fasta
 		-m {email} = email to add to qsub job end (not mandatory)
 		-h = see help\n\n"
 	exit 0
@@ -85,7 +84,10 @@ if [ $fastq != "" ] ; then
 	trashPath=$pathAnalysis"trash"
 	pathTMP="/scratch/orjuela"
 	pathDest=$fastResultsPath
-	BUSCOPathDB="/home/orjuela/BUSCO_DB/actinopterygii_odb9"
+	#BUSCOPathDB="/home/orjuela/BUSCO_DB/nematoda_odb9"
+	BUSCOPathDB="/home/orjuela/BUSCO_DB/metazoa_odb9"
+	#BUSCOPathDB="/home/orjuela/BUSCO_DB/eukaryota_odb9"
+	#/home/orjuela/BUSCO_DB/actinopterygii_odb9"
 	
 	#giving information about job-array to user
 	printf "\033[32m \n Working in directory: "$pathAnalysis
@@ -134,17 +136,18 @@ if [ $fastq != "" ] ; then
 			name=$(basename ${f%%.fa})
 			name=$(basename ${f%%.fa.gz})
 			shortName=$(echo $name | cut -d "." -f 1)
-			shortName=$(echo $name | cut -d "_" -f 1)
+			#shortName=$(echo $name | cut -d "_" -f 1)
 			echo $shortName
 			R1="\$pathToScratch/"$shortName"_R1.fastq.gz"
 			R2="\$pathToScratch/"$shortName"_R2.fastq.gz"
-			fasta="\$pathToScratch/"$shortName"_Trinity.fasta"
-			
+			#fasta="\$pathToScratch/"$shortName"_Trinity.fasta"
+			fasta="\$pathToScratch/"$shortName".fasta" #contigs
 			#writting in sh file (managing transfer) #creation de fichier .sh avec les commandes de transfer vers scratch
 			#modules
 			echo " " > $SHPath"/"$count"_BUSCO-par-sample.sh"
 			echo "# Charging modules"  >> $SHPath"/"$count"_BUSCO-par-sample.sh"
 			#echo "module load system/python/3.6.5" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
+			echo "module load bioinfo/augustus/3.0.3" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
 			echo "module load bioinfo/BUSCO/3.0.2" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
 			
 			#defining scratch and destination			
@@ -168,10 +171,10 @@ if [ $fastq != "" ] ; then
 			echo "cd \$pathToScratch/results_$shortName/" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
 			echo "# Running tool"  >> $SHPath"/"$count"_BUSCO-par-sample.sh"
 				
-			echo ""	python /usr/local/BUSCO-3.0.2/scripts/run_BUSCO.py -i $fasta -o "$shortName"_busco -l $BUSCOPathDB -m transcriptome -c 8  >> $SHPath"/"$count"_BUSCO-par-sample.sh"
+			echo ""python3 /usr/local/BUSCO-3.0.2/scripts/run_BUSCO.py -i $fasta -o "$shortName"_busco -l $BUSCOPathDB -m genome -c 1 -sp caenorhabditis >> $SHPath"/"$count"_BUSCO-par-sample.sh"
 			       
 			#Printing command executed
-			echo "cmd=\" python3 /usr/local/BUSCO-3.0.2/scripts/run_BUSCO.py -i $fasta -o "$shortName"_busco -l $BUSCOPathDB -m transcriptome -c 8  \"" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
+			echo "cmd=\" python3 /usr/local/BUSCO-3.0.2/scripts/run_BUSCO.py -i $fasta -o "$shortName"_busco -l $BUSCOPathDB -m genome -c 1 -sp caenorhabditis \"" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
 			echo "echo \"commande executee: \$cmd\"" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
 			
 			
@@ -182,10 +185,10 @@ if [ $fastq != "" ] ; then
 			echo "echo \"Transfert des donnees node -> master\"" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
 			
 			# Suppression du repertoire tmp noeud
-			#echo " " >> $SHPath"/"$count"_BUSCO-par-sample.sh"	
-			#echo "# Suppression du repertoire tmp noeud"  >> $SHPath"/"$count"_BUSCO-par-sample.sh"
-			#echo "rm -rf \$pathToScratch" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
-			#echo "echo \"Suppression des donnees sur le noeud\"" >> $SHPath"/"$count"_BUSCO-par-sample.sh"	
+			echo " " >> $SHPath"/"$count"_BUSCO-par-sample.sh"	
+			echo "# Suppression du repertoire tmp noeud"  >> $SHPath"/"$count"_BUSCO-par-sample.sh"
+			echo "rm -rf \$pathToScratch" >> $SHPath"/"$count"_BUSCO-par-sample.sh"
+			echo "echo \"Suppression des donnees sur le noeud\"" >> $SHPath"/"$count"_BUSCO-par-sample.sh"	
 			let count+=1
 		fi
 	done
@@ -201,7 +204,7 @@ if [ $fastq != "" ] ; then
 #$ -q bioinfo.q
 #$ -t 1-'$count'
 #$ -tc 400
-#$ -pe ompi 8
+#$ -pe ompi 1
 #$ -S /bin/bash
 
 /bin/bash '$pathAnalysis'/sh/${SGE_TASK_ID}_BUSCO-par-sample.sh

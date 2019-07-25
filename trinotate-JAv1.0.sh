@@ -150,6 +150,7 @@ if [ $fasta != "" ] ; then
 			echo "module load bioinfo/TransDecoder/3.0.0" >> $SHPath"/"$count"_"$softName".sh"
 			echo "module load bioinfo/hmmer/3.1b2" >> $SHPath"/"$count"_"$softName".sh"
 			echo "module load bioinfo/diamond/0.7.11" >> $SHPath"/"$count"_"$softName".sh" #demander la version 0.8 dans les module load
+			echo "module load system/perl/5.24.0" >> $SHPath"/"$count"_"$softName".sh"
 			#echo "module unload system/python/2.7.10" >> $SHPath"/"$count"_"$softName".sh"
 			#echo "module load system/python/3.6.5" >> $SHPath"/"$count"_"$softName".sh"
 			
@@ -305,10 +306,10 @@ if [ $fasta != "" ] ; then
 			echo "echo \"Transfert des donnees node -> master\"" >> $SHPath"/"$count"_"$softName".sh"
 			
 			## Suppression du repertoire tmp noeud
-			echo " " >> $SHPath"/"$count"_"$softName".sh"	
-			echo "# Suppression du repertoire tmp noeud"  >> $SHPath"/"$count"_"$softName".sh"
-			echo "rm -rf \$pathToScratch" >> $SHPath"/"$count"_"$softName".sh"
-			echo "echo \"Suppression des donnees sur le noeud\"" >> $SHPath"/"$count"_"$softName".sh"	
+			#echo " " >> $SHPath"/"$count"_"$softName".sh"	
+			#echo "# Suppression du repertoire tmp noeud"  >> $SHPath"/"$count"_"$softName".sh"
+			#echo "rm -rf \$pathToScratch" >> $SHPath"/"$count"_"$softName".sh"
+			#echo "echo \"Suppression des donnees sur le noeud\"" >> $SHPath"/"$count"_"$softName".sh"	
 			let count+=1
 		fi
 	done

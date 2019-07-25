@@ -6,7 +6,7 @@
 """
     The renameFastaFromAnnotation script
     ==========================
-    :author: Sebastien Ravel and Julie Orjuela
+    :author: Julie Orjuela
     :contact: julie.orjuela@ird.fr
     :date: 07/07/2018
     :version: 0.1

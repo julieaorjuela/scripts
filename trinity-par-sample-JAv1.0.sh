@@ -173,18 +173,35 @@ if [ $fastq != "" ] ; then
 			
 			#Trinity is running in each pair of reads (one sample independiently of replicates) 
 			echo "Trinity --seqType fq --left $R1 --right $R2 --max_memory 50G --CPU 8 --output \$pathToScratch/results_$shortName/trinity_OUT " >> $SHPath"/"$count"_trinity.sh"
-			       
 			#Printing command executed
 			echo "cmd=\"  Trinity --seqType fq --left $R1 --right $R2 --max_memory 50G --CPU 8 --output \$pathToScratch/results_$shortName/trinity_OUT  \"" >> $SHPath"/"$count"_trinity.sh"
-						
-			
-			#Trinity is running in each pair of reads (one sample independiently of replicates) 
-			#echo "Trinity --seqType fq --left $R1 --right $R2 --max_memory 50G --CPU 8 --trimmomatic --quality_trimming_params 'ILLUMINACLIP:/usr/local/Trimmomatic-0.33/adapters/TruSeq2-PE.fa:2:30:10 ILLUMINACLIP:/data3/projects/arapaima/adapt-125pbLib.txt:2:30:10 SLIDINGWINDOW:5:20 LEADING:5 TRAILING:5 MINLEN:25 HEADCROP:10' --output \$pathToScratch/results_$shortName/trinity_OUT " >> $SHPath"/"$count"_trinity.sh"
-			       
-			#Printing command executed
-			#echo "cmd=\"  Trinity --seqType fq --max_memory 50G --CPU 8 --trimmomatic --quality_trimming_params 'ILLUMINACLIP:/usr/local/Trimmomatic-0.33/adapters/TruSeq2-PE.fa:2:30:10 ILLUMINACLIP:/data3/projects/arapaima/adapt-125pbLib.txt:2:30:10 SLIDINGWINDOW:5:20 LEADING:5 TRAILING:5 MINLEN:25 HEADCROP:10' --left $R1 --right $R2 --output \$pathToScratch/results_$shortName/trinity_OUT  \"" >> $SHPath"/"$count"_trinity.sh"
 			echo "echo \"commande executee: \$cmd\"" >> $SHPath"/"$count"_trinity.sh"
+			echo " " >> $SHPath"/"$count"_trinity.sh"
 			
+			# lancer stats tranrate et busco apres avoir assamblé (codé mais jamais testé)
+			#path to Trinity.fasta
+			#echo "#define fasta path " >> $SHPath"/"$count"_trinity.sh"
+			#echo "fasta=\$pathToScratch/results_$shortName/trinity_OUT/Trinity.fasta " >> $SHPath"/"$count"_trinity.sh"
+			#echo "#running TrinityStats " >> $SHPath"/"$count"_trinity.sh"
+			##run stats de l'assemblage
+			#echo ""perl /usr/local/trinityrnaseq-2.5.1/util/TrinityStats.pl \$fasta""  >> $SHPath"/"$count"_trinity.sh"
+			#echo "cmd=\"perl /usr/local/trinityrnaseq-2.5.1/util/TrinityStats.pl \$fasta\"" >> $SHPath"/"$count"_trinity.sh"
+			#echo "echo \"commande executee: \$cmd\"" >> $SHPath"/"$count"_trinity.sh"
+			#echo " " >> $SHPath"/"$count"_trinity.sh"
+			#
+			##run transrate
+			#echo "#running transrate " >> $SHPath"/"$count"_trinity.sh"
+			#echo ""/usr/local/transrate-1.0.3/bin/transrate --assembly  \$fasta --left $R1 --right $R2 --output \$pathToScratch/results_$shortName/transrate_outdir"" >> $SHPath"/"$count"_trinity.sh"
+			#echo "cmd=\" /usr/local/transrate-1.0.3/bin/transrate --assembly  \$fasta --left $R1 --right $R2 --output \$pathToScratch/results_$shortName/transrate_outdir   \"" >> $SHPath"/"$count"_trinity.sh"     
+			#echo " " >> $SHPath"/"$count"_trinity.sh"
+			#
+			##run BUSCO
+			#echo "#running busco " >> $SHPath"/"$count"_trinity.sh"
+			#echo ""BUSCOPathDB=\"/home/orjuela/BUSCO_DB/actinopterygii_odb9\""" >> $SHPath"/"$count"_trinity.sh"
+			#echo "# Running tool busco"   >> $SHPath"/"$count"_trinity.sh" 	
+			#echo ""python /usr/local/BUSCO-3.0.2/scripts/run_BUSCO.py -i \$fasta -o \$pathToScratch/results_$shortName/BUSCO -l \$BUSCOPathDB -m transcriptome -c 8 ""  >> $SHPath"/"$count"_trinity.sh" 
+			#echo "cmd= python3 /usr/local/BUSCO-3.0.2/scripts/run_BUSCO.py -i \$fasta -o \$pathToScratch/results_$shortName/BUSCO -l \$BUSCOPathDB -m transcriptome -c 8  \"" >> $SHPath"/"$count"_trinity.sh" 
+			#echo "echo \"commande executee: \$cmd\""  >> $SHPath"/"$count"_trinity.sh" 
 			
 			# Transfert des données du noeud vers master
 			echo " " >> $SHPath"/"$count"_trinity.sh"
